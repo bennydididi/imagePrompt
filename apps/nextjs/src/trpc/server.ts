@@ -11,33 +11,30 @@ import { callProcedure } from "@trpc/server";
 import { TRPCErrorResponse } from "@trpc/server/rpc";
 import { cache } from "react";
 import { appRouter } from "../../../../packages/api/src/root";
-import { auth } from "@clerk/nextjs/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@saasfly/auth";
 
-type AuthObject = Awaited<ReturnType<typeof auth>>;
+type Session = Awaited<ReturnType<typeof getServerSession>>;
 
 export const createTRPCContext = async (opts: {
   headers: Headers;
-  auth: AuthObject;
-// eslint-disable-next-line @typescript-eslint/require-await
+  auth?: Session;
 }) => {
+  const session = opts.auth ?? (await getServerSession(authOptions));
   return {
-    userId: opts.auth.userId,
+    userId: session?.user?.id,
+    session,
     ...opts,
   };
 };
 
 
-/**
- * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
- * handling a tRPC call from a React Server Component.
- */
 const createContext = cache(async () => {
   return createTRPCContext({
     headers: new Headers({
       cookie: cookies().toString(),
       "x-trpc-source": "rsc",
     }),
-    auth: await auth(),
   });
 });
 
@@ -49,10 +46,6 @@ export const trpc = createTRPCProxyClient<AppRouter>({
         process.env.NODE_ENV === "development" ||
         (op.direction === "down" && op.result instanceof Error),
     }),
-    /**
-     * Custom RSC link that lets us invoke procedures without using http requests. Since Server
-     * Components always run on the server, we can just call the procedure as a function.
-     */
     () =>
       ({op}) =>
         observable((observer) => {
