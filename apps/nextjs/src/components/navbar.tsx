@@ -46,9 +46,7 @@ export function NavBar({
 
   return (
     <header
-      className={`sticky top-0 z-40 flex w-full justify-center border-border bg-background/60 backdrop-blur-xl transition-all ${
-        scroll ? (scrolled ? "border-b" : "bg-background/0") : "border-b"
-      }`}
+      className={`sticky top-0 z-40 flex w-full justify-center border-border bg-background/60 backdrop-blur-xl transition-all ${scrolled ? "border-b" : "bg-background/0"}`}
     >
       <div className="container flex h-16 items-center justify-between py-4">
         <MainNav items={items} params={{ lang: `${lang}` }} marketing={marketing}>
@@ -64,8 +62,8 @@ export function NavBar({
                   href={item.disabled ? "#" : (item.href.startsWith("http") ? item.href : `/${lang}${item.href}`)}
                   className={cn(
                     "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
-                    item.href.startsWith(`/${segment}`)
-                      ? "text-blue-500 font-semibold"
+                    item.href === `/${lang}`
+                      ? "text-purple-600 font-semibold"
                       : "",
                     item.disabled && "cursor-not-allowed opacity-80",
                   )}
@@ -76,20 +74,11 @@ export function NavBar({
             </nav>
           ) : null}
 
-          <div className="w-[1px] h-8 bg-accent"></div>
-
-          {rightElements}
-
-          <div className="hidden md:flex lg:flex xl:flex">
-            <GitHubStar />
-          </div>
-          <LocaleChange url={"/"} />
+          {/* 移除分隔线、GitHub Star、语言切换等元素，只保留Login按钮 */}
           {!user ? (
             <Link href={`/${lang}/login`}>
               <Button variant="outline" size="sm">
-                {typeof marketing.login === "string"
-                  ? marketing.login
-                  : "Default Login Text"}
+                Login
               </Button>
             </Link>
           ) : null}
@@ -100,18 +89,7 @@ export function NavBar({
               params={{ lang: `${lang}` }}
               dict={dropdown}
             />
-          ) : (
-            <Button
-              className="px-3"
-              variant="default"
-              size="sm"
-              onClick={signInModal.onOpen}
-            >
-              {typeof marketing.signup === "string"
-                ? marketing.signup
-                : "Default Signup Text"}
-            </Button>
-          )}
+          ) : null}
         </div>
       </div>
     </header>
