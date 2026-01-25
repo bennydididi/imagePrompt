@@ -9,6 +9,10 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "next-env.d.ts"]
     },
+    "@saasfly/auth-proxy#build": {
+      "dependsOn": ["^topo"],
+      "outputs": []
+    },
     "dev": {
       "persistent": true,
       "cache": false
