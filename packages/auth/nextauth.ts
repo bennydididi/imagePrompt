@@ -3,7 +3,8 @@ import { KyselyAdapter } from "@auth/kysely-adapter";
 import GitHubProvider from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
 
-import { MagicLinkEmail, resend, siteConfig } from "@saasfly/common";
+
+import { MagicLinkEmail, safeSendEmail, siteConfig } from "@saasfly/common";
 
 import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 
@@ -41,8 +42,8 @@ export const authOptions: NextAuthOptions = {
 
   providers: [
     GitHubProvider({
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
+      clientId: env.GITHUB_CLIENT_ID as string,
+      clientSecret: env.GITHUB_CLIENT_SECRET as string,
       httpOptions: { timeout: 15000 },
     }),
     EmailProvider({
@@ -58,7 +59,7 @@ export const authOptions: NextAuthOptions = {
           : "Activate your account";
 
         try {
-          await resend.emails.send({
+          await safeSendEmail({
             from: env.RESEND_FROM,
             to: identifier,
             subject: authSubject,
@@ -75,6 +76,7 @@ export const authOptions: NextAuthOptions = {
             },
           });
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.log(error);
         }
       },

@@ -1,4 +1,4 @@
-export { resend } from "./email";
+export { resend, safeSendEmail } from "./email";
 
 export { MagicLinkEmail } from "./emails/magic-link-email";
 
