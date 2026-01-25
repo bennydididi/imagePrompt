@@ -18,6 +18,8 @@ interface DashboardLayoutProps {
   };
 }
 
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
 }

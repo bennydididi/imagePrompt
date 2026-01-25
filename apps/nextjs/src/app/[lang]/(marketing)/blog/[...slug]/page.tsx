@@ -15,6 +15,7 @@ import { buttonVariants } from "@saasfly/ui/button";
 import * as Icons from "@saasfly/ui/icons";
 
 import { env } from "~/env.mjs";
+import { siteConfig } from "~/config/site";
 import { absoluteUrl, formatDate } from "~/lib/utils";
 
 interface PostPageProps {
@@ -40,7 +41,13 @@ export function generateMetadata({ params }: PostPageProps): Metadata {
     return {};
   }
 
-  const url = env.NEXT_PUBLIC_APP_URL;
+  const url = env.NEXT_PUBLIC_APP_URL ?? siteConfig?.url;
+  if (!url) {
+    return {
+      title: post.title,
+      description: post.description,
+    };
+  }
 
   const ogUrl = new URL(`${url}/api/og`);
   ogUrl.searchParams.set("heading", post.title);
