@@ -105,19 +105,39 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+      if (user) {
+        if (env.IS_DEBUG === "true") {
+          console.log("[JWT] New user signing in:", { id: user.id, email: user.email });
+        }
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.picture = user.image;
+        return token;
+      }
+
       const email = token?.email ?? "";
+      if (!email) {
+        if (env.IS_DEBUG === "true") {
+          console.log("[JWT] No email in token");
+        }
+        return token;
+      }
+
       const dbUser = await db
         .selectFrom("User")
         .where("email", "=", email)
         .selectAll()
         .executeTakeFirst();
+
       if (!dbUser) {
-        if (user) {
-          token.id = user?.id;
+        if (env.IS_DEBUG === "true") {
+          console.log("[JWT] User not found in database:", email);
         }
         return token;
       }
+
       let isAdmin = false;
       if (env.ADMIN_EMAIL) {
         const adminEmails = env.ADMIN_EMAIL.split(",");
@@ -125,13 +145,20 @@ export const authOptions: NextAuthOptions = {
           isAdmin = adminEmails.includes(email);
         }
       }
-      return {
+
+      const result = {
         id: dbUser.id,
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.image,
         isAdmin: isAdmin,
       };
+
+      if (env.IS_DEBUG === "true") {
+        console.log("[JWT] Returning token:", { id: result.id, email: result.email, isAdmin: result.isAdmin });
+      }
+
+      return result;
     },
   },
   debug: process.env.NODE_ENV !== "production",
