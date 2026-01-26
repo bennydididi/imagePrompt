@@ -29,6 +29,13 @@ declare module "next-auth" {
   }
 }
 
+// 配置全局代理
+if (process.env.HTTPS_PROXY || process.env.HTTP_PROXY) {
+  process.env.GLOBAL_AGENT_HTTP_PROXY = process.env.HTTP_PROXY;
+  process.env.GLOBAL_AGENT_HTTPS_PROXY = process.env.HTTPS_PROXY;
+  require('global-agent/bootstrap');
+}
+
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
@@ -45,7 +52,9 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID as string,
       clientSecret: env.GOOGLE_CLIENT_SECRET as string,
-      httpOptions: { timeout: 30000 },
+      httpOptions: { 
+        timeout: 30000,
+      },
     }),
     EmailProvider({
       sendVerificationRequest: async ({ identifier, url }) => {
