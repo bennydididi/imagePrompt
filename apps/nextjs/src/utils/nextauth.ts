@@ -17,7 +17,7 @@ const publicRoute = [
   "^/\\w{2}$", // root with locale
 ];
 
-const noNeedProcessRoute = [".*\\.png", ".*\\.jpg", ".*\\.opengraph-image.png"];
+const noNeedProcessRoute = [".*\\.png", ".*\\.jpg", ".*\\.opengraph-image.png", "/__next_devtools__/.*", "/_next/.*"];
 
 const noRedirectRoute = ["/api(.*)", "/trpc(.*)", "/admin"];
 
