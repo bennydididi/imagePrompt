@@ -78,10 +78,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
         var _hmt = _hmt || []; 
         (function() { 
           var hm = document.createElement("script"); 
@@ -90,8 +90,9 @@ export default function RootLayout({
           s.parentNode.insertBefore(hm, s); 
         })(); 
       `,
-        }}
-      />
+          }}
+        />
+      </head>
       {/*<Suspense>*/}
       {/*  <PostHogPageview />*/}
       {/*</Suspense>*/}
