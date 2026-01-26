@@ -48,13 +48,13 @@ export default async function LoginPage({
             alt=""
           />
           <h1 className="text-2xl font-semibold tracking-tight">
-            {dict.login.welcome_back}
+            imagePrompt
           </h1>
-          <p className="text-sm text-muted-foreground">
-            {dict.login.signin_title}
-          </p>
+          <p className="text-sm text-muted-foreground">Sign in to your account</p>
         </div>
-        <UserAuthForm lang={lang} dict={dict.login} />
+        <div>
+          <UserAuthForm lang={lang} dict={dict.login} />
+        </div>
         {/* <p className="px-8 text-center text-sm text-muted-foreground">
           <Link
             href={`/${lang}/register`}

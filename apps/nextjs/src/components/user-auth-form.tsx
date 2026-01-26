@@ -43,7 +43,7 @@ export function UserAuthForm({
     resolver: zodResolver(userAuthSchema),
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false);
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false);
   const searchParams = useSearchParams();
 
   async function onSubmit(data: FormData) {
@@ -73,6 +73,16 @@ export function UserAuthForm({
     });
   }
 
+  async function handleGoogleSignIn() {
+    setIsGoogleLoading(true);
+    await signIn("google", {
+      callbackUrl: searchParams?.get("from") ?? `/${lang}/dashboard`,
+    }).catch((error) => {
+      console.error("Error during Google sign in:", error);
+      setIsGoogleLoading(false);
+    });
+  }
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -88,7 +98,7 @@ export function UserAuthForm({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isGitHubLoading || disabled}
+              disabled={isLoading || isGoogleLoading || disabled}
               {...register("email")}
             />
             {errors?.email && (
@@ -117,23 +127,16 @@ export function UserAuthForm({
           </span>
         </div>
       </div>
-      <button
-        type="button"
+      <button 
         className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          setIsGitHubLoading(true);
-          signIn("github").catch((error) => {
-            console.error("GitHub signIn error:", error);
-          });
-        }}
-        disabled={isLoading || isGitHubLoading}
+        onClick={handleGoogleSignIn}
+        disabled={isGoogleLoading || disabled}
       >
-        {isGitHubLoading ? (
+        {isGoogleLoading && (
           <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.GitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        Github
+        )}
+        <Icons.Google className="mr-2 h-4 w-4" />
+        Google
       </button>
     </div>
   );
