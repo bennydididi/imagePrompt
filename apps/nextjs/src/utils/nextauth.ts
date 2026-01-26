@@ -7,19 +7,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import { i18n } from "~/config/i18n-config";
 
 const publicRoute = [
-  "/(\\w{2}/)?signin(.*)",
-  "/(\\w{2}/)?terms(.*)",
-  "/(\\w{2}/)?privacy(.*)",
-  "/(\\w{2}/)?docs(.*)",
-  "/(\\w{2}/)?blog(.*)",
-  "/(\\w{2}/)?pricing(.*)",
-  "/(\\w{2}/)?(image-to-prompt|magic-enhance|ai-describe-image|ai-image-generator)(.*)",
+  "/(\\w{2}/)?signin.*",
+  "/(\\w{2}/)?terms.*",
+  "/(\\w{2}/)?privacy.*",
+  "/(\\w{2}/)?docs.*",
+  "/(\\w{2}/)?blog.*",
+  "/(\\w{2}/)?pricing.*",
+  "/(\\w{2}/)?(image-to-prompt|magic-enhance|ai-describe-image|ai-image-generator).*",
   "^/\\w{2}$", // root with locale
+  "/api/auth.*", // auth routes
 ];
 
 const noNeedProcessRoute = [".*\\.png", ".*\\.jpg", ".*\\.opengraph-image.png", "/__next_devtools__/.*", "/_next/.*"];
 
-const noRedirectRoute = ["/api(.*)", "/trpc(.*)", "/admin"];
+const noRedirectRoute = ["/api.*", "/trpc.*", "/admin.*"];
 
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers

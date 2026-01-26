@@ -125,7 +125,7 @@ export const authOptions: NextAuthOptions = {
       };
     },
   },
-  debug: env.IS_DEBUG === "true",
+  debug: process.env.NODE_ENV !== "production",
 };
 
 // Use it in server contexts
