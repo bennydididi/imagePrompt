@@ -79,6 +79,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+        var _hmt = _hmt || []; 
+        (function() { 
+          var hm = document.createElement("script"); 
+          hm.src = "https://hm.baidu.com/hm.js?11edbc5d9fedc9d8c8dac5a73ddef1f0"; 
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s); 
+        })(); 
+      `,
+        }}
+      />
       {/*<Suspense>*/}
       {/*  <PostHogPageview />*/}
       {/*</Suspense>*/}
