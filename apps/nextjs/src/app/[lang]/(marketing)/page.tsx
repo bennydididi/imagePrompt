@@ -41,6 +41,7 @@ export default async function IndexPage({
   };
 }) {
   const dict = await getDictionary(lang);
+  const isZh = lang === "zh";
 
   return (
     <>
@@ -48,19 +49,67 @@ export default async function IndexPage({
       <section className="container py-20">
         <div className="flex flex-col items-center text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            Create Better AI Art with <span className="text-purple-600">Image Prompt</span>
+            {isZh ? (
+              <>
+                用 <span className="text-purple-600">Image Prompt</span> 将图片转为提示词，自动生成高质量 AI 提示词
+              </>
+            ) : (
+              <>
+                Create Better AI Art with <span className="text-purple-600">Image Prompt</span>
+              </>
+            )}
           </h1>
           <p className="text-lg text-neutral-500 dark:text-neutral-400 mb-8 max-w-2xl">
-            Inspire ideas. Enhance image prompt. Create masterpieces
+            {isZh
+              ? "将图片描述（describe this image）转换为可直接用于生成图像的 prompt，一键生成并优化你的 image to prompt。"
+              : "Describe this image and generate AI-ready prompts. Image to prompt generator to convert images into detailed prompts quickly."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg">
-              Try it now!
+              {isZh ? "立即试用" : "Try it now!"}
             </Button>
             <Button variant="outline" className="px-8 py-6 text-lg">
-              Tutorials
+              {isZh ? "教程" : "Tutorials"}
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* 说明 / 特性详情区域（H2s，针对次关键词） */}
+      <section className="container py-12">
+        <div className="max-w-4xl mx-auto space-y-10">
+          <article>
+            <h2 className="text-2xl font-bold mb-3">
+              {isZh ? "如何将图片转换为 Prompt（Image to Prompt）" : "How to convert an image to a prompt"}
+            </h2>
+            <p className="text-neutral-600 dark:text-neutral-400">
+              {isZh
+                ? "使用我们的 Image to Prompt 工具，你只需上传图片或粘贴图片链接，系统会自动描述图片（describe this image），并生成结构化的 prompt，可直接用于图像生成器。"
+                : "Upload an image or paste an image URL and our image to prompt generator will describe the image and produce a structured, AI-ready prompt."}
+            </p>
+          </article>
+
+          <article>
+            <h2 className="text-2xl font-bold mb-3">
+              {isZh ? "AI 自动描述图片（AI Describe Image）" : "AI describe image — automatic image describer"}
+            </h2>
+            <p className="text-neutral-600 dark:text-neutral-400">
+              {isZh
+                ? "我们的 image describer 能够分析图片内容、风格与细节，生成一段清晰的图片描述（describe image），有助于快速生成更精确的 prompt。"
+                : "Our image describer analyzes content, style and details to produce a concise description of the image, helping you write better prompts."}
+            </p>
+          </article>
+
+          <article>
+            <h2 className="text-2xl font-bold mb-3">
+              {isZh ? "生成器与导出：Image to Prompt Generator" : "Image to Prompt Generator — generate and export"}
+            </h2>
+            <p className="text-neutral-600 dark:text-neutral-400">
+              {isZh
+                ? "生成后可一键复制或导出 prompt，支持多种模型与格式。尝试我们的 image to prompt generator 来快速生成高质量提示词。"
+                : "After generation you can copy or export prompts in multiple formats. Try the image to prompt generator to quickly produce high-quality prompts."}
+            </p>
+          </article>
         </div>
       </section>
 

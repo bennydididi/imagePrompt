@@ -38,15 +38,21 @@ export const metadata = {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
   },
-  description: siteConfig.description,
+  description: {
+    default: siteConfig.description,
+    en: "Image to Prompt — Generate prompts from images. Describe this image and get AI-ready prompts quickly.",
+    zh: "图像转提示词 — 将图片自动描述并生成高质量 AI prompt，支持一键复制与导出。",
+  },
   keywords: [
-    "Next.js",
-    "Shadcn ui",
-    "Sass",
-    "Fast ",
-    "Simple ",
-    "Easy",
-    "Cloud Native",
+    "image to prompt",
+    "describe this image",
+    "image prompt.org",
+    "image describer",
+    "imageprompt",
+    "ai describe image",
+    "image prompt",
+    "image to prompt generator",
+    "describe image",
   ],
   authors: [
     {
@@ -61,14 +67,49 @@ export const metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     siteName: siteConfig.name,
+    images: siteConfig.ogImage || `${siteConfig.url}/logo.svg`,
   },
   icons: {
     icon: "/logo.svg",
     // shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  metadataBase: new URL("https://show.saasfly.io/"),
+  metadataBase: new URL(siteConfig.url),
+  alternates: {
+    canonical: siteConfig.url,
+    languages: {
+      "en-US": `${siteConfig.url}/en`,
+      "zh-CN": `${siteConfig.url}/zh`,
+    },
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    images: siteConfig.ogImage || `${siteConfig.url}/logo.svg`,
+  },
   // manifest: `${siteConfig.url}/site.webmanifest`,
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "url": siteConfig.url,
+      "name": siteConfig.name,
+      "logo": `${siteConfig.url}/logo.svg`
+    },
+    {
+      "@type": "WebSite",
+      "url": siteConfig.url,
+      "name": siteConfig.name,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${siteConfig.url}/search?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
 };
 
 export default function RootLayout({
@@ -92,6 +133,12 @@ export default function RootLayout({
       `,
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <link rel="alternate" hrefLang="en-US" href={`${siteConfig.url}/en`} />
+        <link rel="alternate" hrefLang="zh-CN" href={`${siteConfig.url}/zh`} />
       </head>
       {/*<Suspense>*/}
       {/*  <PostHogPageview />*/}

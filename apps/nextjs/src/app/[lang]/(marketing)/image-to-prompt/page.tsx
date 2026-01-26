@@ -3,6 +3,8 @@ import React, { useRef, useState, useEffect } from 'react';
 
 export default function ImageToPromptPage({ params }: any) {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const lang = params?.lang ?? "en";
+  const isZh = lang === "zh";
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [fileId, setFileId] = useState<string | null>(null);
@@ -143,8 +145,14 @@ export default function ImageToPromptPage({ params }: any) {
     <div className="container py-12">
       {/* 页面标题 */}
       <div className="text-center mb-12">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2">Free Image to Prompt Generator</h1>
-        <p className="text-neutral-500 dark:text-neutral-400">Convert Image to Prompt to generate your own image</p>
+        <h1 className="text-3xl md:text-4xl font-bold mb-2">
+          {isZh ? "免费图片转提示词生成器" : "Free Image to Prompt Generator"}
+        </h1>
+        <p className="text-neutral-500 dark:text-neutral-400">
+          {isZh
+            ? "将图片（describe this image）转换为 AI prompt，支持一键复制与导出。"
+            : "Convert an image to a detailed prompt to generate your own images — describe this image and get AI-ready prompts."}
+        </p>
       </div>
 
       {/* 主内容区域 */}
@@ -210,7 +218,11 @@ export default function ImageToPromptPage({ params }: any) {
               <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-2">Your image will show here</div>
               {preview ? (
                 <div className="mt-4">
-                  <img src={preview} alt="preview" className="max-w-full max-h-64 mx-auto rounded-md" />
+                  <img
+                    src={preview}
+                    alt={isZh ? "已上传图片预览 — 用于 image to prompt 生成器" : "Uploaded image preview — preview for image to prompt generator"}
+                    className="max-w-full max-h-64 mx-auto rounded-md"
+                  />
                   {selectedFile && (
                     <div className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
                       File: <span className="font-mono">{selectedFile.name}</span>
